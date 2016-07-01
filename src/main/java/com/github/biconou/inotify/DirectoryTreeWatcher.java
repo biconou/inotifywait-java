@@ -29,7 +29,7 @@ public class DirectoryTreeWatcher {
 
     public void startWatch() {
 
-        Thread newThread = new Thread(() -> {
+        Thread inotifywaitThread = new Thread(() -> {
 
             File dirToWatch = new File(pathToWatch);
             if (!dirToWatch.exists()) {
@@ -46,13 +46,25 @@ public class DirectoryTreeWatcher {
             };
 
             ProcessBuilder pb = new ProcessBuilder(inotifywaitCmd);
-            Process p = null;
+            final Process p;
             try {
                 p = pb.start();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
             BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
+
+            Thread stopThread = new Thread(() -> {
+                while (stopWatch == false) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        //
+                    }
+                }
+                p.destroy();
+            });
+            stopThread.start();
 
             String line = null;
             try {
@@ -65,6 +77,11 @@ public class DirectoryTreeWatcher {
             }
         });
 
-        newThread.start();
+        inotifywaitThread.start();
     }
+
+    public void stopWatch() {
+        this.stopWatch = true;
+    }
+
 }
