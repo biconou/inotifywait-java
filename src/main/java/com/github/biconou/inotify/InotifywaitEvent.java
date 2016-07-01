@@ -139,4 +139,14 @@ public class InotifywaitEvent {
     public boolean isDir() {
         return dir;
     }
+
+    @Override
+    public String toString() {
+        return "InotifywaitEvent{" +
+                "path='" + path + '\'' +
+                ", file='" + file + '\'' +
+                ", type=" + type +
+                ", dir=" + dir +
+                '}';
+    }
 }
