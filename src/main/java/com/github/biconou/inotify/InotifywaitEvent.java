@@ -81,13 +81,12 @@ public class InotifywaitEvent {
 
         InotifywaitEvent newInotifywaitEvent = new InotifywaitEvent();
 
-        Pattern p = Pattern.compile("(.*),(\".*\"),(.*)");
+        Pattern p = Pattern.compile("(.*)/\\*/(.*)/\\*/(.*)");
         Matcher m = p.matcher(eventString);
         if (m.matches()) {
             newInotifywaitEvent.path = m.group(1);
             String eventTypes = m.group(2);
-            eventTypes = eventTypes.replace("\"","");
-            String types[] = eventTypes.split(",");
+            String types[] = eventTypes.split(":");
             Arrays.stream(types).forEach(t -> {
                 if ("ISDIR".equals(t)) {
                     newInotifywaitEvent.dir = true;
@@ -105,16 +104,7 @@ public class InotifywaitEvent {
 
             newInotifywaitEvent.file = m.group(3);
         } else {
-            p = Pattern.compile("(.*),([^\",]*),(.*)");
-            m = p.matcher(eventString);
-            if (m.matches()) {
-                newInotifywaitEvent.path = m.group(1);
-                newInotifywaitEvent.file = m.group(3);
-                newInotifywaitEvent.type = EventType.parse(m.group(2));
-
-            } else {
-                return null;
-            }
+            return null;
         }
 
         if (newInotifywaitEvent.type == null) {

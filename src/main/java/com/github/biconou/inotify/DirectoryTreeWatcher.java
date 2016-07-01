@@ -41,7 +41,8 @@ public class DirectoryTreeWatcher {
                     "--monitor",    // Keep listening for events forever.  Without
                     // this option, inotifywait will exit after one
                     // event is received.
-                    "--csv",        // Print events in CSV format.
+                    "--format",     // Format
+                    "%w/*/%:e/*/%f",
                     pathToWatch
             };
 
@@ -71,6 +72,7 @@ public class DirectoryTreeWatcher {
                 while ((line = br.readLine()) != null) {
                     InotifywaitEvent newEvent = InotifywaitEvent.parse(line);
                     registeredListeners.forEach(listener -> listener.doEvent(newEvent));
+                    //System.out.println(line);
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);
