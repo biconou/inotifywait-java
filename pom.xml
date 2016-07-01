@@ -4,7 +4,7 @@
     <groupId>org.github.biconou</groupId>
     <artifactId>inotifywait-java</artifactId>
     <packaging>jar</packaging>
-    <version>1.0-SNAPSHOT</version>
+    <version>0.1-SNAPSHOT</version>
     <name>inotifywait-java</name>
 
     <build>
