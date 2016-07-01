@@ -81,8 +81,6 @@ public class InotifywaitEvent {
 
         InotifywaitEvent newInotifywaitEvent = new InotifywaitEvent();
 
-        String[] eventProps = eventString.split(",");
-
         Pattern p = Pattern.compile("(.*),(\".*\"),(.*)");
         Matcher m = p.matcher(eventString);
         if (m.matches()) {

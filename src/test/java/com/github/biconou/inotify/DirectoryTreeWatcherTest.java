@@ -1,12 +1,10 @@
 package com.github.biconou.inotify;
 
-import org.apache.commons.io.FileUtils;
-import org.junit.Test;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
+import org.apache.commons.io.FileUtils;
+import org.junit.Test;
 
 /**
  * Created by remi on 28/06/16.
