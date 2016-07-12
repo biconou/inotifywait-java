@@ -1,5 +1,8 @@
 package com.github.biconou.inotify;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -11,6 +14,8 @@ import java.util.List;
  * Created by remi on 28/06/16.
  */
 public class DirectoryTreeWatcher {
+
+    private static Logger log = LoggerFactory.getLogger(DirectoryTreeWatcher.class);
 
     private String pathToWatch = null;
 
@@ -30,6 +35,8 @@ public class DirectoryTreeWatcher {
     public void startWatch() {
 
         Thread inotifywaitThread = new Thread(() -> {
+
+            stopWatch = false;
 
             File dirToWatch = new File(pathToWatch);
             if (!dirToWatch.exists()) {
@@ -64,12 +71,17 @@ public class DirectoryTreeWatcher {
                     }
                 }
                 p.destroy();
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    // nothing to do there
+                }
             });
             stopThread.start();
 
             String line = null;
             try {
-                while ((line = br.readLine()) != null) {
+                while (!stopWatch && (line = br.readLine()) != null) {
                     InotifywaitEvent newEvent = InotifywaitEvent.parse(line);
                     registeredListeners.forEach(listener -> listener.doEvent(newEvent));
                     //System.out.println(line);
@@ -77,9 +89,12 @@ public class DirectoryTreeWatcher {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+            log.info("Thread ["+Thread.currentThread().getName()+"] finished");
         });
 
         inotifywaitThread.start();
+        log.info("Thread ["+inotifywaitThread.getName()+"] started : watching "+pathToWatch);
+
     }
 
     public void stopWatch() {
