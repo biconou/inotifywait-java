@@ -26,6 +26,8 @@ public interface InotifywaitEventListener {
 
     void doMovedFrom(InotifywaitEvent event);
 
+    void doMoveSelf(InotifywaitEvent event);
+
     void doCreate(InotifywaitEvent event);
 
     void doDelete(InotifywaitEvent event);

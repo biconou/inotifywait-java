@@ -42,6 +42,9 @@ public class DefaultInotifywaitEventListener implements InotifywaitEventListener
             case moved_to:
                 doMovedTo(event);
                 break;
+            case move_self:
+                doMoveSelf(event);
+                break;
             case open:
                 doOpen(event);
                 break;
@@ -88,6 +91,11 @@ public class DefaultInotifywaitEventListener implements InotifywaitEventListener
 
     @Override
     public void doMovedFrom(InotifywaitEvent event) {
+        // does nothing here
+    }
+
+    @Override
+    public void doMoveSelf(InotifywaitEvent event) {
         // does nothing here
     }
 

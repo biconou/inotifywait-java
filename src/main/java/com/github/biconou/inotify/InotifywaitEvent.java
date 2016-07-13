@@ -21,6 +21,7 @@ public class InotifywaitEvent {
         open,		    // file or directory opened
         moved_to,	    // file or directory moved to watched directory
         moved_from,	    // file or directory moved from watched directory
+        move_self,
         create,		    // file or directory created within watched directory
         delete,		    // file or directory deleted within watched directory
         delete_self,	// file or directory was deleted
@@ -31,7 +32,7 @@ public class InotifywaitEvent {
         }
 
         public boolean isMove() {
-            return this.equals(moved_from) || this.equals(moved_to);
+            return this.equals(moved_from) || this.equals(moved_to) || this.equals(move_self);
         }
 
         public boolean isDelete() {
@@ -56,6 +57,8 @@ public class InotifywaitEvent {
                     return moved_to;
                 case "MOVED_FROM" :
                     return moved_from;
+                case "MOVE_SELF" :
+                    return move_self;
                 case "CREATE" :
                     return create;
                 case "DELETE" :
@@ -108,7 +111,7 @@ public class InotifywaitEvent {
         }
 
         if (newInotifywaitEvent.type == null) {
-            throw new RuntimeException("Can not determine event type");
+            throw new RuntimeException("Can not determine event type ["+eventString+"]");
         }
         return newInotifywaitEvent;
 
